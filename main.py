@@ -9,12 +9,12 @@ from telegram.ext import Updater, MessageHandler, CommandHandler, Filters
 url = "127.0.0.1:5000"
 
 def start(update, context):
-    append_id(update.message.chat_id)
-    context.bot.send_message(chat_id=update.message.chat_id, text="Willkommen, giiriger Anker Suffer")
+    response = append_id(update.message.chat_id)
+    context.bot.send_message(chat_id=update.message.chat_id, text=response)
 
 def stop(update, context):
-    del_by_id(update.message.chat_id)
-    context.bot.send_message(chat_id=update.message.chat_id, text="Tschüss, du abtrüniger Wassertrinker")
+    response = del_by_id(update.message.chat_id)
+    context.bot.send_message(chat_id=update.message.chat_id, text=response)
 
 
 def append_id(id):
@@ -23,13 +23,13 @@ def append_id(id):
 
     for person in people:
         if person["id"] == id:
-            return "Du wirst bereits informiert"
+            return "Du hast dich bereits angemeldet. Du kannst dich mit '/stop' wieder abmelden"
 
     people.append({"id": id})
 
     with open("people.json", "w") as file:
         json.dump(people, file, indent=4)
-    return "Du wirst ab sofort mit Anker-Infos versorgt"
+    return "Willkommen, giiriger Anker Suffer :beer::tada: Du kannst dich mit '/stop' wieder abmelden"
 
 def del_by_id(id):
     with open("people.json", "r") as file:
@@ -42,7 +42,7 @@ def del_by_id(id):
     with open("people.json", "w") as file:
         people = json.dump(people, file, indent=4)
 
-    return "deleted your chat-id"
+    return "Tschüss du Abtrünniger Wassertrinker."
 
 def reminder():
     response = requests.get("http://" + url + "/coop/anker").text
@@ -53,7 +53,7 @@ def reminder():
 
     if promotions["anker"] == False and response != "kei Aktion":
         promotions["anker"] == True
-        send_message_to_all(response)
+        send_message_to_all("Heute ist ein guter Tag: " + response)
 
     if promotions["anker"] == True and response == "kei Aktion":
         promotions["anker"] == False
