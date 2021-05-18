@@ -1,5 +1,5 @@
 # anker-bot
-a telegram-bot to which sends a message to you if Anker-beer is on sale.
+A telegram-bot with one of the most noble duties existing: Inform the user when Anker-beer is on sale.
 ## Start
 `/start` stores your chat ID.
 You will recieve a message on every first day of Anker-beer sale.
