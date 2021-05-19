@@ -46,20 +46,29 @@ def del_by_id(id):
 
 def reminder():
     response = requests.get("http://" + url + "/coop/anker").text
-    print(response)
+    #response = input("Response: ")
+
+    if new_prom(response):
+        send_message_to_all("Heute ist ein guter Tag: " + response)
+        #print("Heute ist ein guter Tag: " + response)
+
+def new_prom(response):
+    newprom = False
 
     with open("promotion.json", "r") as file:
         promotions = json.load(file)
 
-    if promotions["anker"] == False and response != "kei Aktion":
-        promotions["anker"] == True
-        send_message_to_all("Heute ist ein guter Tag: " + response)
+    ankerprom = promotions["anker"]["promotion"]
+    if not ankerprom and response != "NOPROM":
+        ankerprom = True
+        newprom = True
+    elif ankerprom and response == "NOPROM":
+        ankerprom = False
 
-    if promotions["anker"] == True and response == "kei Aktion":
-        promotions["anker"] == False
-
+    promotions["anker"]["promotion"] = ankerprom
     with open("promotion.json", "w") as file:
-        promotions = json.dump(promotions, file, indent=4)
+        json.dump(promotions, file, indent=4)
+    return newprom
 
 def send_message_to_all(message):
     with open("people.json", "r") as file:
