@@ -6,7 +6,8 @@ import requests
 
 from telegram.ext import Updater, MessageHandler, CommandHandler, Filters
 
-url = "127.0.0.1:5000"
+with open("settings.json", "r") as file:
+    url = json.load(file)["url"]
 
 def start(update, context):
     response = append_id(update.message.chat_id)
@@ -29,7 +30,11 @@ def append_id(id):
 
     with open("people.json", "w") as file:
         json.dump(people, file, indent=4)
-    return "Willkommen, giiriger Anker Suffer :beer::tada: Du kannst dich mit '/stop' wieder abmelden"
+    return """Willkommen, giiriger Anker Suffer :beer::tada:\n
+            Sobald Anker Aktion ist im Coop, schickt dir dieser Bot eine Nachricht\n
+            Die Nachricht kommt nur am ersten Tag der Aktion.
+            Du kannst dich mit '/stop' wieder abmelden\n
+            Zum waule :beer:"""
 
 def del_by_id(id):
     with open("people.json", "r") as file:
@@ -42,7 +47,7 @@ def del_by_id(id):
     with open("people.json", "w") as file:
         people = json.dump(people, file, indent=4)
 
-    return "Tschüss du Abtrünniger Wassertrinker."
+    return "Tschüss du abtrünniger Wassertrinker."
 
 def reminder():
     response = requests.get("http://" + url + "/coop/anker").text
