@@ -2,3 +2,7 @@ token.json
 people.json
 promotion.json
 settings.json
+
+*.xopp
+test*
+backup*

@@ -1,87 +1,57 @@
 import json
 import time
 import schedule
-
 import requests
 
-from telegram.ext import Updater, MessageHandler, CommandHandler, Filters
+from telegram.ext import Updater, MessageHandler, CommandHandler, Filters, CallbackQueryHandler
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+
+import python.datamgmt as dm
+import python.inline_handler as ih
 
 with open("settings.json", "r") as file:
     url = json.load(file)["url"]
 
 def start(update, context):
-    response = append_id(update.message.chat_id)
+    response = dm.append_id(update.message.chat_id)
     context.bot.send_message(chat_id=update.message.chat_id, text=response)
 
 def stop(update, context):
-    response = del_by_id(update.message.chat_id)
+    response = dm.del_by_id(update.message.chat_id)
     context.bot.send_message(chat_id=update.message.chat_id, text=response)
 
+def settings(update, context):
+    keyboard = []
+    row = []
+    row.append(InlineKeyboardButton("Interessen ändern", callback_data="{} {}".format(update.message.chat_id, "interessts")))
+    keyboard.append(row)
+    context.bot.send_message(chat_id=update.message.chat_id, text="Salletti Spaghetti. Was willst du tun?", reply_markup=InlineKeyboardMarkup(keyboard))
 
-def append_id(id):
-    with open("people.json", "r") as file:
-        people = json.load(file)
-
-    for person in people:
-        if person["id"] == id:
-            return "Du hast dich bereits angemeldet. Du kannst dich mit '/stop' wieder abmelden"
-
-    people.append({"id": id})
-
-    with open("people.json", "w") as file:
-        json.dump(people, file, indent=4)
-    return """🎉🍺 Willkommen, giiriger Anker Suffer 🍺🎉
-Sobald Anker Aktion ist im Coop, schickt dir dieser Bot eine Nachricht
-Die Nachricht kommt nur am ersten Tag der Aktion.
-Du kannst dich mit '/stop' wieder abmelden
-Zum waule 🍻"""
-
-def del_by_id(id):
-    with open("people.json", "r") as file:
-        people = json.load(file)
-    for i in range(len(people)):
-        person = people[i]
-        if id == person["id"]:
-            del people[i]
-            break
-    with open("people.json", "w") as file:
-        people = json.dump(people, file, indent=4)
-
-    return "Tschüss du abtrünniger Wassertrinker."
+    update.message.delete()
 
 def reminder():
-    response = requests.get("http://" + url + "/coop/anker").text
-    #response = input("Response: ")
+    list = dm.get_products()
+    for product in list:
+        response = requests.get(f"http://{url}/{product['store']}/{product['id']}").text
+        #response = input("Response: ")
 
-    if new_prom(response):
-        send_message_to_all("Heute ist ein guter Tag: " + response)
-        #print("Heute ist ein guter Tag: " + response)
+        if response != "NOPROM":
+            send_message_to(product['id'], response)
+            #print("Heute ist ein guter Tag: " + response)
 
-def new_prom(response):
-    newprom = False
-
-    with open("promotion.json", "r") as file:
-        promotions = json.load(file)
-
-    ankerprom = promotions["anker"]["promotion"]
-    if not ankerprom and response != "NOPROM":
-        ankerprom = True
-        newprom = True
-    elif ankerprom and response == "NOPROM":
-        ankerprom = False
-
-    promotions["anker"]["promotion"] = ankerprom
-    with open("promotion.json", "w") as file:
-        json.dump(promotions, file, indent=4)
-    return newprom
-
-def send_message_to_all(message):
+def send_message_to_all(message): #NOT USED
     with open("people.json", "r") as file:
         people = json.load(file)
         for person in people:
             updater.bot.send_message(chat_id=person["id"], text=message)
 
 
+def send_message_to(product_id, message):
+    with open("people.json", "r") as file:
+        people = json.load(file)
+        for person in people:
+            if product_id in person["intr"]:
+                updater.bot.send_message(chat_id=person["id"], text=message)
 
 #MAIN--------------------------------------------------------------------------
 
@@ -91,14 +61,17 @@ with open('token.json', 'r') as token_file:
 updater = Updater(token=token, use_context=True)
 dispatcher = updater.dispatcher
 
+dispatcher.add_handler(CallbackQueryHandler(ih.inline_handler))
+
 dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler("stop", stop))
+dispatcher.add_handler(CommandHandler("settings", settings))
 
 updater.start_polling()
 
-schedule.every().day.at("08:00").do(reminder) # real Timer
+schedule.every().monday.at("08:00").do(reminder) # real Timer
 #schedule.every(10).seconds.do(reminder) # for test only
 
 while True:
     schedule.run_pending()
-    time.sleep(10)
+    time.sleep(5)
