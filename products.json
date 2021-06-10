@@ -1,3 +1,4 @@
 [
-  {"id": "anker", "name": "Anker", "store": "coop"}
+  {"id": "anker", "name": "Anker", "store": "coop", "store_name": "Coop"},
+  {"id": "spar_lager", "name": "Spar Lager", "store": "spar", "store_name": "Spar"}
 ]

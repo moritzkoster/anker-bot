@@ -3,6 +3,6 @@ people.json
 promotion.json
 settings.json
 
-*.xopp
+*.xopp*
 test*
 backup*
