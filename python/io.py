@@ -9,7 +9,9 @@ import python.inline_handler as ih
 
 
 with open("settings.json", "r") as file:
-    DEBUG = json.load(file)["DEBUG"]
+    dict = json.load(file)
+    DEBUG = dict["DEBUG"]
+    fancy_ans = dict["fancy_answer"]
 
 def start(update, context):
     response = dm.append_id(update.message.chat_id)
@@ -29,6 +31,8 @@ def settings(update, context):
     update.message.delete()
 
 def fancy_answer(name, prom, store):
+    if fancy_ans = "server": # the old server delivers fancy answers by himself, no need to adapt them.
+        return prom
     with open("data/" + name + ".json", "r") as file:
         texts = json.load(file)
     text = random.choice(texts)
