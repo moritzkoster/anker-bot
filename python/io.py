@@ -31,7 +31,7 @@ def settings(update, context):
     update.message.delete()
 
 def fancy_answer(name, prom, store):
-    if fancy_ans = "server": # the old server delivers fancy answers by himself, no need to adapt them.
+    if fancy_ans == "server": # the old server delivers fancy answers by himself, no need to adapt them.
         return prom
     with open("data/" + name + ".json", "r") as file:
         texts = json.load(file)

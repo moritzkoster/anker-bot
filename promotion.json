@@ -1,6 +1,9 @@
 {
     "anker": {
-        "promotion": true,
+        "promotion": "25% ab 20.-",
         "date": 0
+    },
+    "spar_lager": {
+        "promotion": "NOPROM"
     }
 }

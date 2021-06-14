@@ -32,23 +32,22 @@ def del_by_id(user_id):
 
     return "Tschüss du abtrünniger Wassertrinker."
 
-def new_prom(response): # UNUSED
-    newprom = False
+def new_prom(product, response): # UNUSED
 
     with open("promotion.json", "r") as file:
         promotions = json.load(file)
 
-    ankerprom = promotions["anker"]["promotion"]
-    if not ankerprom and response != "NOPROM":
-        ankerprom = True
-        newprom = True
-    elif ankerprom and response == "NOPROM":
-        ankerprom = False
+    lastprom = promotions[product]["promotion"]
+    promotions[product]["promotion"] = response
 
-    promotions["anker"]["promotion"] = ankerprom
     with open("promotion.json", "w") as file:
         json.dump(promotions, file, indent=4)
-    return newprom
+
+    if response == lastprom and response != "NOPROM":
+        return False
+    else:
+        return True
+
 
 
 # UTILITIES --------------------------------------------------------------------

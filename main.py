@@ -16,9 +16,9 @@ with open("settings.json", "r") as file:
 def reminder():
     list = dm.get_products()
     for product in list:
-        response = requests.get(f"http://{url}/{product['store']}/{product['id']}").text
+        response = requests.get(f"http://{url}/{product['store']}/{product['id']}").text.strip()
 
-        if response != "NOPROM":
+        if dm.new_prom(product["id"], response):
             message = io.fancy_answer(product["id"], response, product["store_name"])
             io.message_to_interessted(product['id'], message)
 
