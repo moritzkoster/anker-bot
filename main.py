@@ -25,7 +25,7 @@ def reminder():
 
 #MAIN--------------------------------------------------------------------------
 
-schedule.every().monday.at("08:00").do(reminder) # real Timer
+schedule.every().day.at("08:00").do(reminder) # real Timer
 #schedule.every(10).seconds.do(reminder) # for test only
 
 while True:

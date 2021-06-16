@@ -9,7 +9,7 @@ def append_id(id):
         if person["id"] == id:
             return "Du hast dich bereits angemeldet. Du kannst dich mit '/stop' wieder abmelden"
 
-    people.append({"id": id, "anker": True})
+    people.append({"id": id, "intr": ["anker"]})
 
     with open("people.json", "w") as file:
         json.dump(people, file, indent=4)
