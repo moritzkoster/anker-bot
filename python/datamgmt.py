@@ -55,6 +55,9 @@ def get_people():
     with open("people.json", "r") as file:
         return json.load(file)
 
+def get_text(key):
+    with open("data/text.json", "r") as file:
+        return json.load(file)[key]
 
 def get_user_by_id(user_id):
     for person in get_people():

@@ -30,6 +30,11 @@ def settings(update, context):
 
     update.message.delete()
 
+def info(update, context):
+    text = dm.get_text("info")
+    context.bot.send_message(chat_id=update.message.chat_id, text=text)
+
+
 def fancy_answer(name, prom, store):
     if fancy_ans == "server": # the old server delivers fancy answers by himself, no need to adapt them.
         return prom
@@ -101,5 +106,6 @@ dispatcher.add_handler(CallbackQueryHandler(inline_handler))
 dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler("stop", stop))
 dispatcher.add_handler(CommandHandler("settings", settings))
+dispatcher.add_handler(CommandHandler("info", info))
 
 updater.start_polling()
