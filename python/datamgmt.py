@@ -32,7 +32,7 @@ def del_by_id(user_id):
 
     return "Tschüss du abtrünniger Wassertrinker."
 
-def new_prom(product, response): # UNUSED
+def new_prom(product, response):
 
     with open("promotion.json", "r") as file:
         promotions = json.load(file)
@@ -43,10 +43,9 @@ def new_prom(product, response): # UNUSED
     with open("promotion.json", "w") as file:
         json.dump(promotions, file, indent=4)
 
-    if response == lastprom and response != "NOPROM":
-        return False
-    else:
+    if response != "NOPROM" and response != lastprom:
         return True
+    return False
 
 
 
