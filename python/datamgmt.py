@@ -13,11 +13,7 @@ def append_id(id):
 
     with open("people.json", "w") as file:
         json.dump(people, file, indent=4)
-    return """🎉🍺 Willkommen, giiriger Anker Suffer 🍺🎉
-Sobald Anker Aktion ist im Coop, schickt dir dieser Bot eine Nachricht
-Die Nachricht kommt nur am ersten Tag der Aktion.
-Du kannst dich mit '/stop' wieder abmelden
-Zum waule 🍻"""
+    return get_text("welcome")
 
 def del_by_id(user_id):
     with open("people.json", "r") as file:
