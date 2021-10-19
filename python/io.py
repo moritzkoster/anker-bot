@@ -38,10 +38,14 @@ def info(update, context):
 def fancy_answer(name, prom, store):
     if fancy_ans == "server": # the old server delivers fancy answers by himself, no need to adapt them.
         return prom
-    with open("data/" + name + ".json", "r") as file:
-        texts = json.load(file)
-    text = random.choice(texts)
-    return text.format(DISC=prom, STORE=store)
+    try:
+        with open("data/" + name + ".json", "r") as file:
+            texts = json.load(file)
+        text = random.choice(texts)
+        return text.format(DISC=prom, STORE=store)
+    except:
+        product_name = dm.get_product_by_id(name)["name"]
+        return f'{product_name} isch {prom} im {store}'
 
 # def send_message_to_all(message): #NOT USED
 #     with open("people.json", "r") as file:

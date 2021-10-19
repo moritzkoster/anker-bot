@@ -4,5 +4,6 @@
   {"id": "quoellfrisch10", "name": "Quöllfrisch Teni", "store": "coop", "store_name": "Coop"},
   {"id": "quoellfrisch10n", "name": "Quöllfrisch Teni Naturtrüeb", "store": "coop", "store_name": "Coop"},
   {"id": "quoellfrisch6", "name": "Quöllfrisch Sixpack", "store": "coop", "store_name": "Coop"},
-  {"id": "quoellfrisch6n", "name": "Quöllfrisch Sixpack Naturtrüeb", "store": "coop", "store_name": "Coop"}
+  {"id": "quoellfrisch6n", "name": "Quöllfrisch Sixpack Naturtrüeb", "store": "coop", "store_name": "Coop"},
+  {"id": "falafel", "name": "Falafel Alnatura", "store": "migros", "store_name": "Migros"}
 ]
