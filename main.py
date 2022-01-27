@@ -19,8 +19,8 @@ def reminder():
         response = requests.get(f"http://{url}/{product['store']}/{product['id']}").text.strip()
 
         if dm.new_prom(product["id"], response):
-            message = io.fancy_answer(product["id"], response, product["store_name"])
-            io.message_to_interessted(product['id'], message)
+            #message = io.fancy_answer(product["id"], response, product["store_name"])
+            io.message_to_interessted(product['id'], response, product["store_name"])
 
 
 #MAIN--------------------------------------------------------------------------

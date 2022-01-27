@@ -71,3 +71,18 @@ def rm_product(context, query, user_id, values):
     dm.write_user(user)
     name = dm.get_product_by_id(product_id)["name"]
     return {"chat_id": user_id, "text": f"Du wirst nicht informiert, wenn {name} Aktion ist", "markup": False}
+
+def change_answer_mode(context, query, user_id):
+    keyboard = []
+    col = []
+    col.append(InlineKeyboardButton("Text", callback_data=f"{query.message.chat_id} answer_mode text"))
+    col.append(InlineKeyboardButton("Memes", callback_data=f"{query.message.chat_id} answer_mode meme"))
+    keyboard.append(col)
+    return {"chat_id": user_id, "text": "Wie willst benachrichtig werden?", "markup": InlineKeyboardMarkup(keyboard)}
+
+def answer_mode(context, query, user_id, values):
+    mode = values[0]
+    user = dm.get_user_by_id(user_id)
+    user["answer_mode"] = mode
+    dm.write_user(user)
+    return {"chat_id": user_id, "text": f"Du wirst nun per {mode} informiert wenn irgendwas Aktion ist", "markup": False}
