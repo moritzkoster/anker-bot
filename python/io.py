@@ -38,7 +38,7 @@ def info(update, context):
     context.bot.send_message(chat_id=update.message.chat_id, text=text)
 
 def test_function(update, context):
-    meme = fancy_meme("anker", "TEST", "TEST")
+    meme = open("data/meme/still_here.jpg", "rb")
     context.bot.send_photo(chat_id=update.message.chat_id, photo=meme)
 
 def fancy_answer(name, prom, store):
@@ -141,6 +141,6 @@ dispatcher.add_handler(CommandHandler("stop", stop))
 dispatcher.add_handler(CommandHandler("settings", settings))
 dispatcher.add_handler(CommandHandler("info", info))
 
-if DEBUG: dispatcher.add_handler(CommandHandler("test", test_function))
+dispatcher.add_handler(CommandHandler("test", test_function))
 
 updater.start_polling()
