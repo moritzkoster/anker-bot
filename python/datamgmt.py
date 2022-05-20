@@ -33,7 +33,12 @@ def new_prom(product, response):
     with open("promotion.json", "r") as file:
         promotions = json.load(file)
 
-    lastprom = promotions[product]["promotion"]
+    if product in promotions:
+        lastprom = promotions[product]["promotion"]
+    else:
+        lastprom = "NOPROM"
+        promotions[product] = {}
+
     promotions[product]["promotion"] = response
 
     with open("promotion.json", "w") as file:

@@ -58,7 +58,7 @@ def fancy_meme(product_id, prom, store):
         with open("data/meme.json", "r") as file:
             available_memes = json.load(file)
         filename = random.choice(available_memes[product_id])
-        return open(f"data/meme/{filename}", "rb")
+        return f"data/meme/{filename}"
     except:
         return False
 
@@ -78,9 +78,10 @@ def message_to_interessted(product_id, response, store_name):
         for person in people:
             if product_id in person["intr"]:
                 if person["answer_mode"] == "meme" and meme:
-                    updater.bot.send_photo(chat_id=person["id"], photo=meme)
+                    updater.bot.send_photo(chat_id=person["id"], photo=open(meme, "rb"))
                 # if person["answer_mode"] == "text":
-                send(person["id"], text)
+                else:
+                    send(person["id"], text)
 
                 #updater.bot.send_message(chat_id=person["id"], text=message)
 
