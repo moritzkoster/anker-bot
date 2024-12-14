@@ -23,7 +23,14 @@ def stop(update, context):
     response = dm.del_by_id(update.message.chat_id)
     context.bot.send_message(chat_id=update.message.chat_id, text=response)
 
+def status(update, context):
+    response = dm.get_promotions()
+    print(f"\033[96m\033[1mLOG\033[0m:  status sent")
+    context.bot.send_message(chat_id=update.message.chat_id, text=response)
+
 def settings(update, context):
+    print(f"\033[96m\033[1mLOG\033[0m:  settings changed")
+
     keyboard = []
     row = []
     row.append(InlineKeyboardButton("Interessen ändern", callback_data="{} {}".format(update.message.chat_id, "interessts")))
@@ -35,10 +42,12 @@ def settings(update, context):
 
 def info(update, context):
     text = dm.get_text("info")
+    print(f"\033[96m\033[1mLOG\033[0m:  info sent")
     context.bot.send_message(chat_id=update.message.chat_id, text=text)
 
 def test_function(update, context):
     meme = open("data/meme/still_here.jpg", "rb")
+    print(f"\033[96m\033[1mLOG\033[0m:  test meme sent")
     context.bot.send_photo(chat_id=update.message.chat_id, photo=meme)
 
 def fancy_answer(name, prom, store):
@@ -73,11 +82,11 @@ def message_to_interessted(product_id, response, store_name):
     meme = fancy_meme(product_id, response, store_name)
     text = fancy_answer(product_id, response, store_name)
 
-    with open("people.json", "r") as file:
+    with open("data/people.json", "r") as file:
         people = json.load(file)
         for person in people:
             if product_id in person["intr"]:
-                if person["answer_mode"] == "meme" and meme:
+                if "answer_mode" in person and person["answer_mode"] == "meme" and meme:
                     updater.bot.send_photo(chat_id=person["id"], photo=open(meme, "rb"))
                 # if person["answer_mode"] == "text":
                 else:
@@ -97,6 +106,8 @@ def send_dict(dict):
     send(dict["chat_id"], dict["text"], reply_markup=dict["markup"])
 
 def inline_handler(update, context):
+    print(f"\033[96m\033[1mLOG\033[0m:  some inline handler shit")
+
     query = update.callback_query
     query_data = query.data.split(" ")
     user, key = query_data[0:2]
@@ -128,7 +139,7 @@ def inline_handler(update, context):
     update.callback_query.message.delete()
 
 
-with open('token.json', 'r') as token_file:
+with open('data/token.json', 'r') as token_file:
     if TEST_TOKEN: token = json.load(token_file)["test-token"]
     else: token = json.load(token_file)["token"]
 
@@ -139,6 +150,7 @@ dispatcher.add_handler(CallbackQueryHandler(inline_handler))
 
 dispatcher.add_handler(CommandHandler('start', start))
 dispatcher.add_handler(CommandHandler("stop", stop))
+dispatcher.add_handler(CommandHandler("status", status))
 dispatcher.add_handler(CommandHandler("settings", settings))
 dispatcher.add_handler(CommandHandler("info", info))
 

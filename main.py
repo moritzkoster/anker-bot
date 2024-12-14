@@ -19,6 +19,7 @@ def reminder():
         response = requests.get(f"http://{url}/{product['store']}/{product['id']}").text.strip()
 
         if dm.new_prom(product["id"], response):
+            print(f"\033[96m\033[1mLOG\033[0m:  {product['id']} is on prom")
             #message = io.fancy_answer(product["id"], response, product["store_name"])
             io.message_to_interessted(product['id'], response, product["store_name"])
 
@@ -27,6 +28,8 @@ def reminder():
 
 schedule.every().day.at("08:00").do(reminder) # real Timer
 #schedule.every(10).seconds.do(reminder) # for test only
+
+reminder() # startup reminder
 
 while True:
     schedule.run_pending()

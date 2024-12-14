@@ -44,7 +44,7 @@ def generate_keyboard(user, interessted=False):
     return keyboard
 
 def get_list(user, interessted):
-    with open("products.json", "r") as file:
+    with open("data/products.json", "r") as file:
         list = json.load(file)
     intr = []
     for element in list:
